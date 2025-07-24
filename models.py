@@ -1,0 +1,1 @@
+# This file is now deprecated. All model code has been moved to the models/ package.

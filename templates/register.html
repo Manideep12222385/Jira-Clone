@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - Jira Clone</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            background: linear-gradient(135deg, #0747A6 0%, #172B4D 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 440px;
+            padding: 32px;
+            box-sizing: border-box;
+        }
+
+        h1 {
+            color: #172B4D;
+            text-align: center;
+            margin: 0 0 24px 0;
+            font-size: 24px;
+            font-weight: 600;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 6px;
+            color: #172B4D;
+            font-weight: 500;
+            font-size: 14px;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 8px 16px;
+            border: 1px solid #DFE1E6;
+            border-radius: 24px;
+            font-size: 14px;
+            color: #172B4D;
+            box-sizing: border-box;
+            height: 48px;
+            transition: all 0.2s ease;
+            background: white;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: #4C9AFF;
+            box-shadow: 0 0 0 2px rgba(76, 154, 255, 0.2);
+        }
+
+        .password-requirements {
+            margin-top: 12px;
+            padding: 16px;
+            background: #F8F9FA;
+            border-radius: 12px;
+            font-size: 14px;
+        }
+
+        .requirement {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 8px;
+            color: #42526E;
+        }
+
+        .requirement:last-child {
+            margin-bottom: 0;
+        }
+
+        .requirement i {
+            font-size: 16px;
+            color: #42526E;
+            opacity: 0.8;
+        }
+
+        .requirement.valid {
+            color: #00875A;
+        }
+
+        .requirement.valid i {
+            color: #36B37E;
+            opacity: 1;
+        }
+
+        .requirement.invalid {
+            color: #DE350B;
+        }
+
+        .requirement.invalid i {
+            color: #FF5630;
+            opacity: 1;
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            background: #0052CC;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            height: 40px;
+            margin-top: 24px;
+            transition: background-color 0.2s ease;
+        }
+
+        button:hover {
+            background: #0747A6;
+        }
+
+        .login-link {
+            text-align: center;
+            margin-top: 24px;
+            color: #42526E;
+            font-size: 14px;
+        }
+
+        .login-link a {
+            color: #0052CC;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .login-link a:hover {
+            text-decoration: underline;
+        }
+
+        .alert {
+            padding: 12px 16px;
+            margin-bottom: 24px;
+            border-radius: 4px;
+            background: #FFEBE6;
+            color: #BF2600;
+            font-size: 14px;
+            border: 1px solid #FF8F73;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .alert i {
+            font-size: 16px;
+        }
+
+        .logo {
+            text-align: center;
+            margin-bottom: 24px;
+            color: #0052CC;
+            font-size: 32px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo">
+            <i class="fas fa-tasks"></i>
+        </div>
+        <h1>Create New Account</h1>
+        
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert">
+                        <i class="fas fa-exclamation-circle"></i>
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <form method="POST" id="registerForm" onsubmit="return validateForm()">
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" name="username" required>
+            </div>
+
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+
+            <div class="form-group">
+                <label for="name">Full Name</label>
+                <input type="text" id="name" name="name" required>
+            </div>
+
+            <div class="form-group">
+                <label for="role">Role</label>
+                <select id="role" name="role" required>
+                    <option value="">Select Role</option>
+                    <option value="manager">Manager</option>
+                    <option value="client">Client</option>
+                    <option value="stakeholder">Stakeholder</option>
+                    <option value="team_worker">Team Worker</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="password">Password</label>
+                <div class="password-input-wrapper">
+                    <input type="password" id="password" name="password" required>
+                </div>
+                <div class="password-requirements">
+                    <div class="requirement" id="length">
+                        <i class="fas fa-times-circle"></i>
+                        Minimum 8 characters
+                    </div>
+                    <div class="requirement" id="uppercase">
+                        <i class="fas fa-times-circle"></i>
+                        At least one uppercase letter
+                    </div>
+                    <div class="requirement" id="lowercase">
+                        <i class="fas fa-times-circle"></i>
+                        At least one lowercase letter
+                    </div>
+                    <div class="requirement" id="number">
+                        <i class="fas fa-times-circle"></i>
+                        At least one number
+                    </div>
+                    <div class="requirement" id="special">
+                        <i class="fas fa-times-circle"></i>
+                        At least one special character (!@#$%^&*)
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="confirm_password">Confirm Password</label>
+                <div class="password-input-wrapper">
+                    <input type="password" id="confirm_password" name="confirm_password" required>
+                </div>
+            </div>
+
+            <button type="submit">Create Account</button>
+        </form>
+
+        <div class="login-link">
+            Already have an account? <a href="{{ url_for('auth.login') }}">Login here</a>
+        </div>
+    </div>
+
+    <script>
+        function validatePassword(password) {
+            const requirements = {
+                length: password.length >= 8,
+                uppercase: /[A-Z]/.test(password),
+                lowercase: /[a-z]/.test(password),
+                number: /[0-9]/.test(password),
+                special: /[!@#$%^&*]/.test(password)
+            };
+
+            // Update UI for each requirement
+            for (const [requirement, valid] of Object.entries(requirements)) {
+                const element = document.getElementById(requirement);
+                if (valid) {
+                    element.classList.add('valid');
+                    element.classList.remove('invalid');
+                    element.querySelector('i').classList.remove('fa-times-circle');
+                    element.querySelector('i').classList.add('fa-check-circle');
+                } else {
+                    element.classList.add('invalid');
+                    element.classList.remove('valid');
+                    element.querySelector('i').classList.remove('fa-check-circle');
+                    element.querySelector('i').classList.add('fa-times-circle');
+                }
+            }
+
+            return Object.values(requirements).every(Boolean);
+        }
+
+        function validateForm() {
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirm_password').value;
+
+            if (!validatePassword(password)) {
+                alert('Please ensure your password meets all requirements.');
+                return false;
+            }
+
+            if (password !== confirmPassword) {
+                alert('Passwords do not match!');
+                return false;
+            }
+
+            return true;
+        }
+
+        // Live password validation
+        document.getElementById('password').addEventListener('input', function() {
+            validatePassword(this.value);
+        });
+    </script>
+</body>
+</html>

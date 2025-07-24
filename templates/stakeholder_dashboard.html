@@ -1,0 +1,171 @@
+{% extends "base.html" %}
+
+{% block title %}Stakeholder Dashboard - Jira Clone{% endblock %}
+
+{% block content %}
+<div class="dashboard-container">
+    <h1>Stakeholder Dashboard</h1>
+    
+    <div class="overview-section">
+        <h2>Project Overview</h2>
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Project</th>
+                    <th>Client</th>
+                    <th>Team</th>
+                    <th>Progress</th>
+                    <th>End Date</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for project in projects %}
+                <tr class="project-row" data-project-id="{{ project[0] }}" data-project-name="{{ project[1] }}" 
+                    data-project-desc="{{ project[2] }}" data-client="{{ project[8] }}" data-team="{{ project[9] }}"
+                    data-progress="{{ project[7] }}" data-end-date="{{ project[6] }}">
+                    <td>{{ project[1] }}</td>
+                    <td>{{ project[8] }}</td>
+                    <td>{{ project[9] }}</td>
+                    <td>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: {{ project[7] }}%"></div>
+                        </div>
+                        <span>{{ project[7] }}%</span>
+                    </td>
+                    <td>{{ project[6] }}</td>
+                    <td>{{ 'On Track' if project[7] < 100 else 'Completed' }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Project Details Popup -->
+    <div id="projectPopup" class="popup">
+        <div class="popup-content">
+            <span class="close-popup">&times;</span>
+            <h2 id="popupProjectName"></h2>
+            
+            <div class="project-info">
+                <div class="info-section">
+                    <h3>Project Details</h3>
+                    <p><strong>Description:</strong> <span id="popupDescription"></span></p>
+                    <p><strong>Client:</strong> <span id="popupClient"></span></p>
+                    <p><strong>Team:</strong> <span id="popupTeam"></span></p>
+                    <p><strong>End Date:</strong> <span id="popupEndDate"></span></p>
+                </div>
+                
+                <div class="progress-section">
+                    <h3>Project Progress</h3>
+                    <div class="progress-bar-large">
+                        <div id="popupProgressFill" class="progress-fill"></div>
+                    </div>
+                    <span id="popupProgress"></span>
+                </div>
+
+                <div class="tasks-section">
+                    <h3>Tasks Overview</h3>
+                    <div id="popupTasks"></div>
+                </div>
+
+                <div class="team-section">
+                    <h3>Team Members</h3>
+                    <div id="popupTeamMembers"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.popup {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+}
+
+.popup-content {
+    position: relative;
+    background-color: white;
+    margin: 5% auto;
+    padding: 20px;
+    width: 80%;
+    max-width: 800px;
+    border-radius: 8px;
+    max-height: 80vh;
+    overflow-y: auto;
+}
+
+.close-popup {
+    position: absolute;
+    right: 20px;
+    top: 10px;
+    font-size: 24px;
+    cursor: pointer;
+}
+
+.project-info {
+    margin-top: 20px;
+}
+
+.info-section, .progress-section, .tasks-section, .team-section {
+    margin-bottom: 25px;
+    padding: 15px;
+    background-color: #f8f9fa;
+    border-radius: 6px;
+}
+
+.progress-bar-large {
+    height: 25px;
+    background-color: #e9ecef;
+    border-radius: 12px;
+    margin: 10px 0;
+    overflow: hidden;
+}
+
+.progress-bar-large .progress-fill {
+    height: 100%;
+    background-color: #28a745;
+    transition: width 0.3s ease;
+}
+
+.project-row {
+    cursor: pointer;
+}
+
+.project-row:hover {
+    background-color: #f8f9fa;
+}
+
+#popupTasks, #popupTeamMembers {
+    display: grid;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.task-item, .team-member-item {
+    padding: 10px;
+    background-color: white;
+    border: 1px solid #dee2e6;
+    border-radius: 4px;
+}
+
+.task-status {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 0.85em;
+    margin-left: 10px;
+}
+
+.status-todo { background-color: #ffeeba; }
+.status-progress { background-color: #b8daff; }
+.status-done { background-color: #c3e6cb; }
+</style>
+{% endblock %}

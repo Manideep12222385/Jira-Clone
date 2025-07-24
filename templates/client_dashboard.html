@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% block title %}Client Dashboard - Jira Clone{% endblock %}
+
+{% block content %}
+<div class="dashboard-container">
+    <h1>Client Dashboard</h1>
+    
+    <div class="projects-grid">
+        {% for project in projects %}
+        <div class="project-card">
+            <h3>{{ project[1] }}</h3>
+            <p>{{ project[2] }}</p>
+            <div class="project-details">
+                <p><strong>Team:</strong> {{ project[9] }}</p>
+                <p><strong>Start Date:</strong> {{ project[5] }}</p>
+                <p><strong>End Date:</strong> {{ project[6] }}</p>
+                
+                <div class="progress-section">
+                    <label>Progress: {{ project[7] }}%</label>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: {{ project[7] }}%"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<style>
+.projects-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+}
+
+.project-card {
+    background: white;
+    border-radius: 8px;
+    padding: 1.5rem;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.project-details {
+    margin-top: 1rem;
+}
+
+.progress-section {
+    margin-top: 1rem;
+}
+</style>
+{% endblock %}
