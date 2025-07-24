@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Jira Clone Project Management System
 
 A web-based project management system built with Python Flask, similar to Jira, allowing different user roles to manage projects, tasks, and teams.
@@ -133,3 +134,7 @@ Feel free to fork this repository and submit pull requests for any improvements.
 ## License
 
 This project is open source and available under the MIT License.
+=======
+# Jira-Clone
+A web-based project management system built with Python Flask, similar to Jira, allowing different user roles to manage projects, tasks, and teams.
+>>>>>>> 2e2f9911d6045b2580e3a661293fb564bd595838
